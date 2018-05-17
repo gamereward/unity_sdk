@@ -37,17 +37,20 @@ public class GameRandom10 : MonoBehaviour
             string[] values = item.values["rand"].Split(',');//On server script we save the data: randNumber,playerNumber,winOrLoseMoney
             string st = item.GetTime().ToString("MM-dd HH:mm:ss-");
             st += "SELECT:" + values[1] + "-RESULT:" + values[0];
-            if (decimal.Parse(values[2]) > 0)
+            if (values.Length > 2)
             {
-                st += "\r\nWIN:" + values[2];
-            }
-            else if (values[2] == "0")
-            {
-                st += "\r\nDRAW";
-            }
-            else
-            {
-                st += "\r\nLOSE:" + values[2];
+                if (decimal.Parse(values[2]) > 0)
+                {
+                    st += "\r\nWIN:" + values[2];
+                }
+                else if (values[2] == "0")
+                {
+                    st += "\r\nDRAW";
+                }
+                else
+                {
+                    st += "\r\nLOSE:" + values[2];
+                }
             }
             return st;
         }

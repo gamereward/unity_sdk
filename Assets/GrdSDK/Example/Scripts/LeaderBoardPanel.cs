@@ -48,9 +48,9 @@ public class LeaderBoardPanel : MonoBehaviour
                         var dataItem = args.Data[i];
                         GameObject g = Instantiate(itemTemplate, itemTemplate.transform.parent);
                         g.SetActive(true);
-                        g.transform.FindChild("rank").GetComponent<Text>().text = "#" + dataItem.rank.ToString();
-                        g.transform.FindChild("name").GetComponent<Text>().text = dataItem.username;
-                        g.transform.FindChild("score").GetComponent<Text>().text = dataItem.score.ToString();
+                        g.transform.Find("rank").GetComponent<Text>().text = "#" + dataItem.rank.ToString();
+                        g.transform.Find("name").GetComponent<Text>().text = dataItem.username;
+                        g.transform.Find("score").GetComponent<Text>().text = dataItem.score.ToString();
                         items.Add(g);
                     }
                     this.lastIndex += args.Data.Count;

@@ -4,9 +4,13 @@ using UnityEngine;
 namespace Grd
 {
     internal delegate void GrdNetworkEventHandler(string data);
+    public enum GrdNet
+    {
+        Main,Test
+    }
     public class GrdManager
     {
-        public static void Init(string appId,string secret)
+        public static void Init(string appId,string secret,GrdNet net)
         {
             if (handler == null)
             {
@@ -14,9 +18,10 @@ namespace Grd
                 g.name = "GrdManager";
                 handler = g.AddComponent<GrdHandler>();
             }
-            handler.Init(appId, secret, apiUrl);
+            handler.Init(appId, secret, net==GrdNet.Main? apiMainUrl: apiTestUrl);
         }
-        private const string apiUrl = "https://gamereward.io/appapi/";
+        private const string apiTestUrl = "https://test.gamereward.io/appapi/";
+        private const string apiMainUrl = "https://gamereward.io/appapi/";
         private static GrdHandler handler;
         /// <summary>
         /// User information

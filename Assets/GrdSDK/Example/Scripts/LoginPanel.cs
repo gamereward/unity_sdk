@@ -17,7 +17,7 @@ public class LoginPanel : MonoBehaviour {
 	void Start () {
         const string appId = "cc8b8744dbb1353393aac31d371af9a55a67df16";
         const string apiSecret = "1679091c5a880faf6fb5e6087eb1b2dc4daa3db355ef2b0e64b472968cb70f0df4be00279ee2e0a53eafdaa94a151e2ccbe3eb2dad4e422a7cba7b261d923784";
-        GrdManager.Init(appId, apiSecret);
+        GrdManager.Init(appId, apiSecret,GrdNet.Test);
         stepLogin.SetActive(true);
         stepOtp.SetActive(false);
 	}

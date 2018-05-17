@@ -50,12 +50,12 @@ public class TransactionPanel : MonoBehaviour {
                         var dataItem = args.Data[i];
                         GameObject g = Instantiate(itemTemplate, itemTemplate.transform.parent);
                         g.SetActive(true); 
-                        g.transform.FindChild("transdate").GetComponent<Text>().text = dataItem.GetTime().ToString();
-                        g.transform.FindChild("from").GetComponent<Text>().text =  dataItem.from.ToString();
-                        g.transform.FindChild("to").GetComponent<Text>().text = dataItem.to;
-                        g.transform.FindChild("amount").GetComponent<Text>().text = dataItem.amount.ToString();
-                        g.transform.FindChild("status").GetComponent<Text>().text = (dataItem.status==Grd.TransactionStatus.Pending?"pending":(dataItem.status==Grd.TransactionStatus.Success?"success":"error"));
-                        g.transform.FindChild("transtype").GetComponent<Text>().text = (dataItem.transtype == Grd.TransactionType.Base ? "base" : (dataItem.transtype == Grd.TransactionType.External ? "external" : "internal"));
+                        g.transform.Find("transdate").GetComponent<Text>().text = dataItem.GetTime().ToString();
+                        g.transform.Find("from").GetComponent<Text>().text =  dataItem.from.ToString();
+                        g.transform.Find("to").GetComponent<Text>().text = dataItem.to;
+                        g.transform.Find("amount").GetComponent<Text>().text = dataItem.amount.ToString();
+                        g.transform.Find("status").GetComponent<Text>().text = (dataItem.status==Grd.TransactionStatus.Pending?"pending":(dataItem.status==Grd.TransactionStatus.Success?"success":"error"));
+                        g.transform.Find("transtype").GetComponent<Text>().text = (dataItem.transtype == Grd.TransactionType.Base ? "base" : (dataItem.transtype == Grd.TransactionType.External ? "external" : "internal"));
                         items.Add(g);
                     }
                     this.lastIndex += args.Data.Count;
