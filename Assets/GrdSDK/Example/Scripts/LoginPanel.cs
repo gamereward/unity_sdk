@@ -42,7 +42,8 @@ public class LoginPanel : MonoBehaviour {
             if (error == 0)
             {
                 statusText.gameObject.SetActive(true);
-                statusText.text = "An email was sent to your email. Please check email to change password!";
+                statusText.text = "";
+                PanelDoResetPassword.Instance.gameObject.SetActive(true);
             }
             else
             {
@@ -83,8 +84,8 @@ public class LoginPanel : MonoBehaviour {
     {
         RegisterPanel.Instance.Show();
     }
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }
