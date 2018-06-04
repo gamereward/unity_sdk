@@ -108,9 +108,8 @@ namespace Grd
         /// This method use to reset password for user. System will send an email change password for user
         /// </summary>
         /// <param name="username">Username user use to login</param>
-        /// <param name="password">Password user use to login</param>
         /// <param name="callback">Call when completed.</param>
-        public static void ResetPassword(string usernameOrEmail, GrdEventHandler callback)
+        public static void RequestResetPassword(string usernameOrEmail, GrdEventHandler callback)
         {
             Dictionary<string, string> pars = new Dictionary<string, string>();
             pars.Add("email", usernameOrEmail);
@@ -124,6 +123,28 @@ namespace Grd
                     callback(error, args);
                 }
             }, "requestresetpassword", pars);
+        } 
+        /// <summary>
+          /// This method use to reset password for user.
+          /// </summary>
+          /// <param name="token">Token use to reset</param>
+          /// <param name="password">New password</param>
+          /// <param name="callback">Call when completed.</param>
+        public static void ResetPassword(string token,string password, GrdEventHandler callback)
+        {
+            Dictionary<string, string> pars = new Dictionary<string, string>();
+            pars.Add("token", token);
+            pars.Add("password", Md5Sum(password));
+            handler.Post((data) =>
+            {
+                Dictionary<string, object> result = GetObjectData((string)data);
+                if (callback != null)
+                {
+                    int error = int.Parse(result["error"].ToString());
+                    GrdEventArgs args = new GrdEventArgs(error, data, result["message"].ToString());
+                    callback(error, args);
+                }
+            }, "doresetpassword", pars);
         }
         /// <summary>
         /// This function use to register a new user

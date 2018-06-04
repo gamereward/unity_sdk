@@ -36,7 +36,7 @@ public class LoginPanel : MonoBehaviour {
             return;
         }
         ProgressPanel.Instance.Show("Requesting...");
-        GrdManager.ResetPassword(usernameInput.text, (error, args) =>
+        GrdManager.RequestResetPassword(usernameInput.text, (error, args) =>
         {
             ProgressPanel.Instance.Hide();
             if (error == 0)
