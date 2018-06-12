@@ -8,8 +8,17 @@ namespace Grd
     {
         Main,Test
     }
+    /// <summary>
+    /// Class GameReward client constains all method use to connect to gamereward server
+    /// </summary>
     public class GrdManager
     {
+        /// <summary>
+        /// Init all the parameter for connect to reward
+        /// </summary>
+        /// <param name="appId">The application id</param>
+        /// <param name="secret">The secret of the application</param>
+        /// <param name="net">The net of the application: TestNet use for testing your game. MainNet use when public game to users.</param>
         public static void Init(string appId,string secret,GrdNet net)
         {
             if (handler == null)
@@ -34,12 +43,21 @@ namespace Grd
             }
         }
         private static GrdUser user;
+        /// <summary>
+        /// Get the unix timestamp at the momen.
+        /// </summary>
+        /// <returns></returns>
         public static long GetEpochTime()
         {
 
             System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
             return  (long)(System.DateTime.UtcNow - epochStart).TotalSeconds;
         }
+        /// <summary>
+        /// Md5 the string
+        /// </summary>
+        /// <param name="strToEncrypt">The string to md5</param>
+        /// <returns>The string had md5</returns>
         public static string Md5Sum(string strToEncrypt)
         {
             System.Text.UTF8Encoding ue = new System.Text.UTF8Encoding();
@@ -105,14 +123,14 @@ namespace Grd
             }, "logout", null);
         }
         /// <summary>
-        /// This method use to reset password for user. System will send an email change password for user
+        /// This method use to reset password for user. System will send an email to change password.
         /// </summary>
-        /// <param name="username">Username user use to login</param>
+        /// <param name="email">Email of user</param>
         /// <param name="callback">Call when completed.</param>
-        public static void RequestResetPassword(string usernameOrEmail, GrdEventHandler callback)
+        public static void RequestResetPassword(string email, GrdEventHandler callback)
         {
             Dictionary<string, string> pars = new Dictionary<string, string>();
-            pars.Add("email", usernameOrEmail);
+            pars.Add("email", email);
             handler.Post((data) =>
             {
                 Dictionary<string, object> result = GetObjectData((string)data);
@@ -127,7 +145,7 @@ namespace Grd
         /// <summary>
           /// This method use to reset password for user.
           /// </summary>
-          /// <param name="token">Token use to reset</param>
+          /// <param name="token">Token use to reset. Get this token from email.</param>
           /// <param name="password">New password</param>
           /// <param name="callback">Call when completed.</param>
         public static void ResetPassword(string token,string password, GrdEventHandler callback)
@@ -265,6 +283,11 @@ namespace Grd
                 }
             }, "qrcode", dic);
         }
+        /// <summary>
+        /// Attract the texture from text response from server
+        /// </summary>
+        /// <param name="responseText">The Base 64 text return from server</param>
+        /// <returns></returns>
         private static Texture2D GetTexture(string responseText)
         {
 
@@ -311,6 +334,11 @@ namespace Grd
                 }
             }, "callserverscript", pars);
         }
+        /// <summary>
+        /// Format the number as string that server accept
+        /// </summary>
+        /// <param name="number">The number</param>
+        /// <returns></returns>
         private static string FormatNumber(decimal number)
         {
             char[] array = number.ToString().ToCharArray();
@@ -341,7 +369,7 @@ namespace Grd
         /// <summary>
         /// Get the newest user balance from server update to user object.
         /// </summary>
-        /// <param name="callback"></param>
+        /// <param name="callback">Call when finished.</param>
         public static void UpdateBalance(GrdEventHandler callback)
         {
             handler.Get((data) =>
@@ -498,10 +526,26 @@ namespace Grd
                 }
             }, "getleaderboard", pars);
         }
+        /// <summary>
+        /// Get the user session data with the key name in a session store
+        /// </summary>
+        /// <param name="store">The session store name.</param>
+        /// <param name="key">The key name of the data.</param>
+        /// <param name="start">Start record number begin with 0</param>
+        /// <param name="count">Number of record will return</param>
+        /// <param name="callBack">Call when finished</param>
         public static void GetUserSessionData(string store, string key, int start, int count, GrdSessionDataEventHandler callBack)
         {
             GetUserSessionData(store,new string[] { key }, start, count, callBack);
         }
+        /// <summary>
+        /// Get the user session data with all the key in the keys array in a session store
+        /// </summary>
+        /// <param name="store">The session store name.</param>
+        /// <param name="keys">The array of key name of the data.</param>
+        /// <param name="start">Start record number begin with 0</param>
+        /// <param name="count">Number of record will return</param>
+        /// <param name="callBack">Call when finished</param>
         public static void GetUserSessionData(string store,string[]keys,int start, int count,GrdSessionDataEventHandler callBack)
         {
             Dictionary<string, string> pars = new Dictionary<string, string>();
@@ -530,6 +574,12 @@ namespace Grd
                 }
             }, "getusersessiondata", pars);
         }
+        /// <summary>
+        /// Get the user's wallet transactions.
+        /// </summary>
+        /// <param name="start">Start record number. Begin with 0.</param>
+        /// <param name="count">The number of transactions will return</param>
+        /// <param name="callBack">Call when finished.</param>
         public static void GetTransactions( int start, int count, GrdTransactionEventHandler callBack)
         {
             Dictionary<string, string> pars = new Dictionary<string, string>();
@@ -598,12 +648,30 @@ namespace Grd
     /// </summary>
     public class GrdUser
     {
+        /// <summary>
+        /// The username of the user
+        /// </summary>
         public string username;
+        /// <summary>
+        /// The email of the user
+        /// </summary>
         public string email;
+        /// <summary>
+        /// The Grd wallet Address
+        /// </summary>
         public string address;
+        /// <summary>
+        /// The balance of coin in this user
+        /// </summary>
         public decimal balance;
+        /// <summary>
+        ///  if true:use the otp security otherwise false
+        /// </summary>
         public bool otp = false;
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return text
+    /// </summary>
     public class GrdEventArgs
     {
         public GrdEventArgs(int error, string rawData, string text)
@@ -615,9 +683,18 @@ namespace Grd
         private int error;
         private string text;
         public string RawData { get; private set; }
+        /// <summary>
+        /// The data in string return from server
+        /// </summary>
         public string Text { get { if (error != 0) { return ""; } else { return text; } } }
+        /// <summary>
+        /// The error message if the action had an error
+        /// </summary>
         public string ErrorMessage { get { if (error == 0) { return ""; } else { return text; } } }
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return Image
+    /// </summary>
     public class GrdTextureEventArgs : GrdEventArgs
     {
         public GrdTextureEventArgs(int error,string rawData, string text, Texture2D texture)
@@ -625,8 +702,14 @@ namespace Grd
         {
             this.Texture = texture;
         }
+        /// <summary>
+        /// The texture data return from server
+        /// </summary>
         public Texture2D Texture { get; private set; }
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return LeaderBoard data
+    /// </summary>
     public class GrdLeaderBoardEventArgs : GrdEventArgs
     {
         public GrdLeaderBoardEventArgs(int error, string rawData, string text, System.Collections.ObjectModel.Collection<LeaderBoardItem> data)
@@ -634,8 +717,14 @@ namespace Grd
         {
             this.Data = data;
         }
+        /// <summary>
+        /// The list of leaderboard
+        /// </summary>
         public System.Collections.ObjectModel.Collection<LeaderBoardItem> Data { get; private set; }
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return Json data
+    /// </summary>
     public class GrdCustomEventArgs : GrdEventArgs
     {
         public GrdCustomEventArgs(int error, string rawData, string text, object data)
@@ -643,12 +732,23 @@ namespace Grd
         {
             this.Data = data;
         }
+        /// <summary>
+        /// The object that store the data parse from json string
+        /// </summary>
         public object Data { get; private set; }
+        /// <summary>
+        /// Convert the data to custom class
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetData<T>() where T : class
         {
             return MiniJSON.Json.GetObject<T>(Data);
         }
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return user session data
+    /// </summary>
     public class GrdSessionDataEventArgs : GrdEventArgs
     {
         public GrdSessionDataEventArgs(int error, string rawData, string text, object data)
@@ -667,6 +767,9 @@ namespace Grd
             }
         }
         private System.Collections.ObjectModel.Collection<SessionData> data;
+        /// <summary>
+        /// The list of session and it's data
+        /// </summary>
         public System.Collections.ObjectModel.Collection<SessionData> Data
         {
             get
@@ -675,6 +778,9 @@ namespace Grd
             }
         }
     }
+    /// <summary>
+    /// Class to store the callback data from the action that return transaction data
+    /// </summary>
     public class GrdTransactionEventArgs : GrdEventArgs
     {
         public GrdTransactionEventArgs(int error, string rawData, string text, object data)
@@ -693,6 +799,9 @@ namespace Grd
             }
         }
         private System.Collections.ObjectModel.Collection<Transaction> data;
+        /// <summary>
+        /// The list of transaction
+        /// </summary>
         public System.Collections.ObjectModel.Collection<Transaction> Data
         {
             get
@@ -701,41 +810,103 @@ namespace Grd
             }
         }
     }
+    /// <summary>
+    /// Class store the data of leaderboard
+    /// </summary>
     public class LeaderBoardItem
     {
+        /// <summary>
+        /// User name of player
+        /// </summary>
         public string username;
+        /// <summary>
+        /// Score of player
+        /// </summary>
         public double score;
+        /// <summary>
+        /// Rank of player sort by score
+        /// </summary>
         public int rank;
     }
+    /// <summary>
+    /// Class store the data of user session
+    /// </summary>
     public class SessionData
     {
+        /// <summary>
+        /// The id of the session
+        /// </summary>
         public int sessionid;
+        /// <summary>
+        /// The unix timestamp when session start
+        /// </summary>
         public long sessionstart;
+        /// <summary>
+        /// Convert the sessionstart to datetime
+        /// </summary>
+        /// <returns></returns>
         public System.DateTime GetTime()
         {
             System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
             epochStart.AddSeconds(sessionstart);
             return epochStart;
         }
+        /// <summary>
+        /// The dictionary of values by key of the session data
+        /// </summary>
         public Dictionary<string, string> values = new Dictionary<string, string>();
     }
+    /// <summary>
+    /// The transaction type enum
+    /// </summary>
     public enum TransactionType
     {
         Base=1,Internal=2,External=3
     }
+    /// <summary>
+    /// The transaction status enum
+    /// </summary>
     public enum TransactionStatus
     {
         Pending = 0, Success = 1, Error = 2
     }
+    /// <summary>
+    /// Class store the transaction data
+    /// </summary>
     public class Transaction
     {
+        /// <summary>
+        /// The Tx of the transaction
+        /// </summary>
         public string tx;
+        /// <summary>
+        /// The address send transaction
+        /// </summary>
         public string from;
+        /// <summary>
+        /// The addess received transaction
+        /// </summary>
         public string to;
+        /// <summary>
+        /// Amount of GRD send
+        /// </summary>
         public decimal amount;
+        /// <summary>
+        /// The unix timestamp when send transaction
+        /// </summary>
         public long transdate;
+        /// <summary>
+        /// The type of transaction: Internal,External, Base
+        /// </summary>
         public TransactionType transtype;
+        /// <summary>
+        /// The status of transaction: Success, Failed, Pending
+        /// </summary>
         public TransactionStatus status;
+        /// <summary>
+        /// Convert the Transdate to DateTime
+        /// </summary>
+        /// <returns></returns>
         public System.DateTime GetTime()
         {
             System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
