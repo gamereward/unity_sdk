@@ -184,7 +184,6 @@ public class GameHighLow : MonoBehaviour
                     resultCard = MiniJSON.Json.GetObject<Card>(ls[1]);
                     isShow = true;
                     decimal money = decimal.Parse(ls[2].ToString());
-                    GrdManager.User.balance += money;
                     DisplayMoney();
                     if (resultCard.symbol >= 2 && resultCard.symbol <= 14)
                     {

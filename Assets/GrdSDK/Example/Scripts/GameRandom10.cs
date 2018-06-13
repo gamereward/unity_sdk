@@ -119,7 +119,6 @@ public class GameRandom10 : MonoBehaviour
                             }
                             history.AddHistory(session);
                             buttons[randNumber - 1].GetComponent<Animator>().SetTrigger("Win");
-                            GrdManager.User.balance += money;
                             UpdateMoney();
                         }
                         else

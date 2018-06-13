@@ -326,6 +326,7 @@ namespace Grd
                 }
                 else
                 {
+                    user.balance = decimal.Parse(result["balance"].ToString());
                     args = new GrdCustomEventArgs(0,data, "", result["result"]);
                 }
                 if (callback != null)
