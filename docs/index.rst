@@ -358,7 +358,7 @@ Client scripts:
                List<object>ls=(List<object>) args.Data;
                if(ls[0].ToString()=="0"){
                    //The function exec successfully
-                   //GrdManager.UpdateBalance() or GrdManager.User.balance+=decimal.Parse(ls[4].ToString());
+                  
                }
                else{
                    // Error by logic game
